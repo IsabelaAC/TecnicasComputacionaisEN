@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+//Resolução de sistemas lineares pelo método Gauss-Jacobi
+
+double novox1(double x2,double x3){
+    double valorx1;
+    valorx1 = (7-2*x2-1*x3)/10;           //mudar esse espaço para mudar a formula de x1
+    return valorx1;
+}
+
+double novox2(double x1,double x3){
+    double valorx2;
+    valorx2 = (-8-1*x1-1*x3)/5;             //mudar esse espaço para mudar a formula de x2
+    return valorx2;
+}
+
+double novox3(double x1,double x2){
+    double valorx3;
+    valorx3 = (6-2*x1-3*x2)/10;         //mudar esse espaço para mudar a formula de x3
+    return valorx3;
+}
+
+double maiorValor(double x1,double x2,double x3){        //essa funcao calcula o maior entre três números
+    double maior;
+
+    if(x1>x2){
+        if(x1>x3){
+            maior = x1;
+        }else{
+            maior = x3;}
+    }else{
+        if(x2>x3){
+            maior = x2;
+        }else{
+            maior = x3;}
+    }
+    return maior;
+}
+
+int main(void) {
+    int it=0;       //quantidade de iteracões
+    int c;          //quantidade maxima de iterações
+    double x1anterior,x2anterior,x3anterior;
+    double x1,x2,x3,distx1,distx2,distx3,dist,erro;
+
+    printf("Digite o valor de x1: ");
+    scanf("%lf",&x1);
+    printf("Digite o valor de x2: ");
+    scanf("%lf",&x2);
+    printf("Digite o valor de x3: ");
+    scanf("%lf",&x3);
+    printf("Digite o numero maximo de iteracoes: ");
+    scanf("%d",&c);
+    printf("Erro = ");
+    scanf("%lf",&erro);
+
+    dist = 1;
+
+    x1 = novox1(x2,x3);
+    x2 = novox2(x1,x3);
+    x3 = novox3(x1,x2);
+
+    printf("it\tX1\tX2\tX3\n");
+
+    while(it < c){      //criterio de parada
+
+        x1anterior = x1;
+        x2anterior = x2;    //armazena o valor anterior de x1,x2 e x3
+        x3anterior = x3;
+
+        x1 = novox1(x2,x3);
+        x2 = novox2(x1,x3);        //calcula o valor de x1, x2 e x3
+        x3 = novox3(x1,x2);
+
+        distx1 = fabs(x1-x1anterior);
+        distx2 = fabs(x2-x2anterior);       //calcula o módulo da diferença de x1/x2/x3 e seu valor anterior
+        distx3 = fabs(x3-x3anterior);
+
+        dist = fabs(maiorValor(distx1,distx2,distx3)/maiorValor(x1,x2,x3));       //calcula o distancia d(k)
+
+        printf("%d\t%.4lf\t%.4lf\t%.4lf\n",it+1,x1,x2,x3);
+
+        it++;
+
+        if(dist<erro){          //criterio de parada
+            break;
+        }
+    }
+
+    printf("\n\nResultado final: \n");
+    printf("%d\t%.4lf\t%.4lf\t%.4lf\n",it,x1,x2,x3);
+
+    return 0;
+}
